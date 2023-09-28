@@ -32,7 +32,12 @@ pipeline{
                     sh '''
                     ssh -i "~/.ssh/id_rsa" jenkins@10.200.0.19 << EOF
                     hostname
-                    
+                    docker stop nginx
+                    docker stop mysql
+                    docker stop flask-app
+                    docker rm nginx
+                    docker rm mysql
+                    docker rm flask-app
                     docker pull seethatgee/flask-app
                     docker pull seethatgee/mysql
                     docker pull seethatgee/nginx
