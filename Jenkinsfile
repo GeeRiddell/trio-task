@@ -6,8 +6,6 @@ pipeline{
                     sh '''
                     echo "Hello, you are in jenkins server"
                     hostname
-                    
-
                     '''
                 }
             }
@@ -38,12 +36,19 @@ pipeline{
                     docker pull seethatgee/flask-app
                     docker pull seethatgee/mysql
                     docker pull seethatgee/nginx
-
-
-                    docker network create trioj
+                    docker network inspect trioj && sleep 1 || docker network create trioj
                     docker run -d -p 80:80 --network=trioj --name nginx seethatgee/nginx
                     docker run -d --network=trioj --name flask-app seethatgee/flask-app
                     docker run -d --network=trioj --name mysql seethatgee/mysql
+                    '''
+                }
+            }
+            stage('Cleanup'){
+                steps{
+                    sh '''
+                    docker rmi seethatgee/flask-app
+                    docker rmi seethatgee/mysql
+                    docker rmi seethatgee/nginx
                     '''
                 }
             }
