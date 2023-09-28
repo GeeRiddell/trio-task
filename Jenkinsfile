@@ -14,9 +14,18 @@ pipeline{
             stage('Build docker images'){
                 steps{
                     sh '''
-                    docker build -t nginx ./nginx
-                    docker build -t flask-app ./flask-app
-                    docker build -t mysql ./mysql
+                    docker build -t seethatgee/nginx:latest ./nginx
+                    docker build -t seethatgee/flask-app:latest ./flask-app
+                    docker build -t seethatgee/mysql:latest ./mysql
+                    '''
+                }
+            }
+            stage('push images'){
+                steps{
+                    sh '''
+                    docker push seethatgee/nginx
+                    docker push seethatgee/flask-app 
+                    docker push seethatgee/mysql
                     '''
                 }
             }
@@ -25,10 +34,16 @@ pipeline{
                     sh '''
                     ssh -i "~/.ssh/id_rsa" jenkins@10.200.0.19 << EOF
                     hostname
+                    
+                    docker pull seethatgee/flask-app
+                    docker pull seethatgee/mysql
+                    docker pull seethatgee/nginx
+
+
                     docker network create trioj
-                    docker run -d -p 80:80 --network=trioj seethatgee/nginx
-                    docker run -d --network=trioj seethatgee/flask-app
-                    docker run -d --network=trioj seethatgee/mysql
+                    docker run -d -p 80:80 --network=trioj --name nginx seethatgee/nginx
+                    docker run -d --network=trioj --name flask-app seethatgee/flask-app
+                    docker run -d --network=trioj --name mysql seethatgee/mysql
                     '''
                 }
             }
