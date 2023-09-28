@@ -16,7 +16,7 @@ pipeline{
                     sh '''
                     docker build -t seethatgee/nginx:latest ./nginx
                     docker build -t seethatgee/flask-app:latest ./flask-app
-                    docker build -t seethatgee/mysql:latest ./mysql
+                    docker build -t seethatgee/mysql:latest ./db
                     '''
                 }
             }
