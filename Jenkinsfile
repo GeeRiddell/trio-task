@@ -14,9 +14,9 @@ pipeline{
             stage('Build docker images'){
                 steps{
                     sh '''
-                    docker build -t seethatgee/nginx nginx
-                    docker build -t seethatgee/flask-app flask-app
-                    docker build -t seethatgee/mysql mysql
+                    docker build -t nginx ./nginx
+                    docker build -t flask-app ./flask-app
+                    docker build -t mysql ./mysql
                     '''
                 }
             }
