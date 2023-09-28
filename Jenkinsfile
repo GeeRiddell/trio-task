@@ -1,20 +1,15 @@
 pipeline{
         agent any
         stages{
-            stage('On Jenkins Server'){
-                steps{
-                    sh '''
-                    echo "Hello, you are in jenkins server"
-                    hostname
-                    '''
-                }
-            }
             stage('Build docker images'){
                 steps{
                     sh '''
                     docker build -t seethatgee/nginx:latest ./nginx
                     docker build -t seethatgee/flask-app:latest ./flask-app
                     docker build -t seethatgee/mysql:latest ./db
+                    docker build -t seethatgee/nginx:${BUILD_NUMBER} ./nginx
+                    docker build -t seethatgee/flask-app:${BUILD_NUMBER} ./flask-app
+                    docker build -t seethatgee/mysql:${BUILD_NUMBER} ./db
                     '''
                 }
             }
@@ -24,14 +19,16 @@ pipeline{
                     docker push seethatgee/nginx
                     docker push seethatgee/flask-app 
                     docker push seethatgee/mysql
+                    docker push seethatgee/nginx:${BUILD_NUMBER}
+                    docker push seethatgee/flask-app:${BUILD_NUMBER} 
+                    docker push seethatgee/mysql:${BUILD_NUMBER}
                     '''
                 }
             }
             stage('On Jenkins2 + run containers'){
                 steps{
                     sh '''
-                    ssh -i "~/.ssh/id_rsa" jenkins@10.200.0.19 << EOF
-                    hostname
+                    ssh -i "~/.ssh/id_rsa" jenkins@gemma-jenkins2 << EOF
                     docker stop nginx
                     docker stop mysql
                     docker stop flask-app
