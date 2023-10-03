@@ -1,25 +1,38 @@
 apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  labels:
-    app: nginx
-spec:
-  containers:
-  - name: nginx
-    image: seethatgee/trio-deploy-nginx:latest
-    ports:
-    - containerPort: 80
----
-apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: trio-nginx-service
 spec:
+  type: LoadBalancer
   selector:
     app: nginx
-  ports: 
+  ports:
   - protocol: TCP
     port: 80
     targetPort: 80
-  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trio-nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 20%
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: seethatgee/trio-deploy-nginx:latest
+        ports:
+        - containerPort: 80
