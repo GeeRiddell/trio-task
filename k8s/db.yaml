@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: mysql
-    image: seethatgee/mysql:latest
+    image: seethatgee/trio-mysql:latest
     ports:
     - containerPort: 3306
     env:

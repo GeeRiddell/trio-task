@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: seethatgee/nginx:latest
+    image: seethatgee/trio-deploy-nginx:latest
     ports:
     - containerPort: 80
 ---
