@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: flask-app
 spec:
-  type: ClusterIP
+  type: ClusterIP 
   selector:
-    app: flask-app
+    app: flask
   ports:
   - protocol: TCP
     port: 5000
@@ -16,24 +16,34 @@ kind: Deployment
 metadata:
   name: flask-deployment
   labels:
-    app: flask-app
+    app: flask
 spec:
-  replicas: 5
+  replicas: 10
   selector:
     matchLabels:
-      app: flask-app
+      app: flask
   strategy:
     rollingUpdate:
       maxSurge: 20%
-      maxUnavailable: 20%
+      maxUnavailable: 25%
   template:
     metadata:
       labels:
-        app: flask-app
+        app: flask
     spec:
       containers:
       - name: flask-container
-        image: seethatgee/trio-deploy-flask:latest
-        imagePullPolicy: Always
+        image: seethatgee/trio-flask:latest
         ports:
         - containerPort: 5000
+        env:
+        - name: MYSQLPW
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials 
+              key: MYSQL_ROOT_PASSWORD       
+        - name: DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials 
+              key: MYSQL_DATABASE 
