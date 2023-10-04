@@ -18,7 +18,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: 15
+  replicas: 4
   selector:
     matchLabels:
       app: nginx
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: nginx-container
-        image: seethatgee/trio-deploy-nginx:v2
+        image: seethatgee/trio-deploy-nginx:v3
         imagePullPolicy: Always
         ports:
         - containerPort: 80
