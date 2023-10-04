@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: mysql
-    image: seethatgee/trio-deploy-mysql:v3
+    image: seethatgee/trio-deploy-mysql:latest
     imagePullPolicy: Always
     ports:
     - containerPort: 3306

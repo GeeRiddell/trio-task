@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: nginx-container
-        image: seethatgee/trio-deploy-nginx:v3
+        image: seethatgee/trio-deploy-nginx:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
